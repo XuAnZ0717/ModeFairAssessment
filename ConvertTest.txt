@@ -1,0 +1,113 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class ConvertModuleTest {
+
+    WebDriver driver;
+
+    @BeforeClass
+    public void setUp() {
+        System.setProperty("webdriver.chrome.driver", ""C:\\Browser Binaries\\chromedriver_win32\\chromedriver.exe"");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://www.xe.com/currencyconverter/convert");
+    }
+
+    @Test1
+    public void testConvertUSDtoMYR() {
+        WebElement sourceCurrency = driver.findElement(By.id("sourceCurrency"));
+        sourceCurrency.sendKeys("USD");
+        WebElement targetCurrency = driver.findElement(By.id("targetCurrency"));
+        targetCurrency.sendKeys("MYR");
+
+        WebElement amount = driver.findElement(By.id("amount"));
+        amount.sendKeys("100");
+
+        WebElement convertButton = driver.findElement(By.id("convertButton"));
+        convertButton.click();
+
+        WebElement result = driver.findElement(By.id("result"));
+        Assert.assertTrue(result.getText().contains("MYR"));
+    }
+
+    @Test2
+    public void testConvertEURtoJPY() {
+        WebElement sourceCurrency = driver.findElement(By.id("sourceCurrency"));
+        sourceCurrency.sendKeys("EUR");
+
+        WebElement targetCurrency = driver.findElement(By.id("targetCurrency"));
+        targetCurrency.sendKeys("JPY");
+
+        WebElement amount = driver.findElement(By.id("amount"));
+        amount.sendKeys("100");
+
+        WebElement convertButton = driver.findElement(By.id("convertButton"));
+        convertButton.click();
+
+        WebElement result = driver.findElement(By.id("result"));
+        Assert.assertTrue(result.getText().contains("JPY"));
+    }
+
+    @Test3
+    public void testConvertCNYtoTWD() {
+        WebElement sourceCurrency = driver.findElement(By.id("sourceCurrency"));
+        sourceCurrency.sendKeys("CNY");
+
+        WebElement targetCurrency = driver.findElement(By.id("targetCurrency"));
+        targetCurrency.sendKeys("TWD");
+
+        WebElement amount = driver.findElement(By.id("amount"));
+        amount.sendKeys("100");
+
+        WebElement convertButton = driver.findElement(By.id("convertButton"));
+        convertButton.click();
+
+        WebElement result = driver.findElement(By.id("result"));
+        Assert.assertTrue(result.getText().contains("TWD"));
+    }
+
+    @Test4
+    public void testInvalidAmountInput() {
+        WebElement sourceCurrency = driver.findElement(By.id("sourceCurrency"));
+        sourceCurrency.sendKeys("USD");
+        WebElement targetCurrency = driver.findElement(By.id("targetCurrency"));
+        targetCurrency.sendKeys("EUR");
+
+        WebElement amount = driver.findElement(By.id("amount"));
+        amount.sendKeys("invalid");
+
+        WebElement convertButton = driver.findElement(By.id("convertButton"));
+        convertButton.click();
+
+        WebElement errorMessage = driver.findElement(By.id("errorMessage"));
+        Assert.assertTrue(errorMessage.isDisplayed());
+    }
+
+    @Test5
+    public void testConversionRateNotAvailable() {
+        WebElement sourceCurrency = driver.findElement(By.id("sourceCurrency"));
+        sourceCurrency.sendKeys("USD");
+        WebElement targetCurrency = driver.findElement(By.id("targetCurrency"));
+        targetCurrency.sendKeys("XYZ");
+
+        WebElement amount = driver.findElement(By.id("amount"));
+        amount.sendKeys("100");
+
+        WebElement convertButton = driver.findElement(By.id("convertButton"));
+        convertButton.click();
+
+        WebElement errorMessage = driver.findElement(By.id("errorMessage"));
+        Assert.assertTrue(errorMessage.isDisplayed());
+    }
+
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
+    }
+}
